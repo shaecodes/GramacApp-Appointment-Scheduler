@@ -16,7 +16,7 @@ class AppointmentController {
             $this->processAppointment();
             $this->createVehicle();
         } else {
-            include __DIR__ . '/../views/appointment_form.php';
+            include 'views/appointment_form.php';
         }
     }
 
