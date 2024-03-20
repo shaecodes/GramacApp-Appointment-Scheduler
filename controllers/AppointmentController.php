@@ -13,14 +13,14 @@ class AppointmentController {
 
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->processAppointment();
+            $this->createAppointment();
             $this->createVehicle();
         } else {
             include 'views/appointment_form.php';
         }
     }
 
-    private function processAppointment() {
+    private function createAppointment() {
         $service = isset($_POST['service']) ? $_POST['service'] : '';
     
         $appointmentData = [
