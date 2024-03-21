@@ -1,12 +1,12 @@
 <?php
 
-require_once 'Database.php';
+require_once 'DatabaseController.php';
 
 class Appointment {
     private $db;
 
     public function __construct() {
-        $this->db = new Database();
+        $this->db = new DatabaseController();
     }
 
     public function saveAppointment($data) {

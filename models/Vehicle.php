@@ -1,12 +1,12 @@
 <?php
 
-require_once 'Database.php';
+require_once 'DatabaseController.php';
 
 class Vehicle{
     private $db;
 
     public function __construct(){
-        $this->db = new Database();
+        $this->db = new DatabaseController();
     }
 
     public function saveVehicle($data) {
