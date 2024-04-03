@@ -26,5 +26,9 @@ class RegistrationController {
             echo "Error: " . $e->getMessage();
         }
     }
+
+    public function handleFormSubmission($email, $password, $firstName, $lastName, $phoneNumber, $role) {
+        $this->db->saveUser($email, $password, $firstName, $lastName, $phoneNumber, $role);
+    }
 }
 ?>

@@ -104,6 +104,27 @@ class DatabaseController {
         }
         return $service;
     }
+
+    public function saveUser($email, $password, $firstName, $lastName, $phoneNumber, $role) {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $query = "INSERT INTO users (email, password, firstName, lastName, phoneNumber, role) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$email, $hashedPassword, $firstName, $lastName, $phoneNumber, $role]);
+    }
+
+    public function authenticateUser($email, $password) {
+        $query = "SELECT * FROM users WHERE email = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        } else {
+            return false;
+        }
+    }
+
 }
 
 

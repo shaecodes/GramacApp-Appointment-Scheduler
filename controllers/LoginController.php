@@ -26,4 +26,19 @@ class LoginController {
             exit;
         }
     }
+
+    public function handleFormSubmission($email, $password) {
+        $user = $this->db->authenticateUser($email, $password);
+
+        if ($user) {
+            
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            header("Location: dashboard.php");
+            exit;
+        } else {
+            header("Location: login_form.php?error=1");
+            exit;
+        }
+    }
 }
