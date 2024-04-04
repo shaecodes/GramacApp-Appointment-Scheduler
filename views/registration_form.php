@@ -5,7 +5,7 @@
 </head>
 <body>
     <h2>Registration</h2>
-    <form method="post" action="RegistrationController.php">
+    <form method="post" action="">
         <label>First Name:</label><input type="text" name="first_name" required><br>
         <label>Last Name:</label><input type="text" name="last_name" required><br>
         <label>Phone Number:</label><input type="text" name="phone_number" required><br>
