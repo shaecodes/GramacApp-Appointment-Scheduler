@@ -10,7 +10,7 @@ class RegistrationController {
     }
 
     public function showRegistrationForm() {
-        include 'views/registration_form.php';
+        include '../views/registration_form.php';
     }
 
     public function registerUser($first_name, $last_name, $phone_number, $email, $password) {
