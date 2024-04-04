@@ -23,10 +23,10 @@ class RegistrationController {
                 ':last_name' => $last_name,
                 ':phone_number' => $phone_number,
                 ':email' => $email,
-                ':password' => password_hash($password, PASSWORD_DEFAULT) // Hash the password
+                ':password' => password_hash($password, PASSWORD_DEFAULT)
             ]);
             // Redirect to login page after successful registration
-            header("Location: login_form.php");
+            header("Location: views/login_form.php");
             exit;
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
