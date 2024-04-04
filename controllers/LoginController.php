@@ -18,7 +18,7 @@ class LoginController {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             // Redirect to dashboard or other page
-            header("Location: dashboard.php");
+            header("Location: views/appointment_form.php");
             exit;
         } else {
             // Authentication failed, redirect back to login form with error message
