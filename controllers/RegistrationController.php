@@ -25,6 +25,8 @@ class RegistrationController {
                 ':email' => $email,
                 ':password' => password_hash($password, PASSWORD_DEFAULT)
             ]);
+            // Output a message to ensure the registration process is successful
+            echo "User registered successfully. Redirecting to login page...";
             // Redirect to login page after successful registration
             header("Location: views/login_form.php");
             exit;
