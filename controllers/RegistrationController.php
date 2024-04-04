@@ -34,7 +34,7 @@ class RegistrationController {
             header("Location: ../views/login_form.php");
             exit;
         } catch(PDOException $e) {
-            // Log the errors
+            // Logs the error
             echo "An error occurred while processing your request. Please try again later.";
         } catch(Exception $e) {
             echo $e->getMessage();
