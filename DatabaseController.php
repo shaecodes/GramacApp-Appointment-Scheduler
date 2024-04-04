@@ -128,6 +128,3 @@ class DatabaseController {
 }
 
 
-?>
-
-

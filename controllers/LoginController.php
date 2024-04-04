@@ -11,9 +11,9 @@ class LoginController {
     public function authenticateUser($email, $password) {
         // Check user credentials
         $this->db->connect();
-        $user = $this->db->getUserByEmail($email);
+        $user = $this->db->authenticateUser($email, $password);
 
-        if ($user && password_verify($password, $user['password'])) {
+        if ($user) {
             // Authentication successful, set session variables or perform any other action
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
@@ -31,7 +31,6 @@ class LoginController {
         $user = $this->db->authenticateUser($email, $password);
 
         if ($user) {
-            
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             header("Location: dashboard.php");
