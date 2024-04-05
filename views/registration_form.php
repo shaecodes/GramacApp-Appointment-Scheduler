@@ -33,7 +33,7 @@
                     // Redirect to login form if registration is successful
                     if (xhr.responseText.includes("successful")) {
                         setTimeout(function() {
-                            window.location.href = "../views/login_form.php";
+                            window.location.href = "views/login_form.php";
                         }, 2000); // Redirect after 2 seconds
                     }
                 } else {
