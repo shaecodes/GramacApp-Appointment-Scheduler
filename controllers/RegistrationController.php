@@ -36,15 +36,23 @@ class RegistrationController {
         } catch(PDOException $e) {
             // Logs the error
             echo "An error occurred while processing your request. Please try again later.";
+            // Output more details about the error for debugging
+            echo "Error: " . $e->getMessage();
         } catch(Exception $e) {
+            // Password validation error
             echo $e->getMessage();
         }
     }    
 
     private function isValidPassword($password) {
         // Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character
-        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password);
+        $isValid = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password);
+        if (!$isValid) {
+            throw new Exception("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        }
+        return $isValid;
     }
+
     public function handleFormSubmission($email, $password, $firstName, $lastName, $phoneNumber, $role) {
         $this->db->saveUser($email, $password, $firstName, $lastName, $phoneNumber, $role);
     }
