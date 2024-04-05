@@ -1,7 +1,5 @@
 <?php
 require_once('../DatabaseController.php');
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 class RegistrationController {
     private $db;
@@ -32,9 +30,8 @@ class RegistrationController {
                 ':email' => $email,
                 ':password' => $hashedPassword
             ]);
-            // Redirects to login page after successful registration
-            header("Location: ../views/login_form.php");
-            exit;
+            // Output success message
+            echo "Registration successful. Redirecting to login form...";
         } catch(PDOException $e) {
             // Logs the error
             echo "An error occurred while processing your request. Please try again later.";
@@ -59,3 +56,4 @@ class RegistrationController {
         $this->db->saveUser($email, $password, $firstName, $lastName, $phoneNumber, $role);
     }
 }
+
