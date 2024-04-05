@@ -1,5 +1,7 @@
 <?php
 require_once('../DatabaseController.php');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 class RegistrationController {
     private $db;

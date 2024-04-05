@@ -5,7 +5,7 @@ class DatabaseController {
     private $username = 'root';
     private $password = '';
     private $dbname = 'gramacdb'; 
-    private $conn;
+    public $conn;
 
     public function connect() {
         $this->conn = null;
@@ -55,8 +55,6 @@ class DatabaseController {
             echo "Error: " . $e->getMessage();
         }
     }
-
-
 
     public function saveAppointment($data) {
         $this->createAppointmentsTable();
@@ -126,5 +124,4 @@ class DatabaseController {
     }
 
 }
-
 
