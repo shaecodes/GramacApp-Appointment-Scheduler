@@ -18,11 +18,11 @@ class LoginController {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             // Redirect to dashboard or other page
-            header("Location: views/appointment_form.php");
+            header("Location: ../views/appointment_form.php");
             exit;
         } else {
             // Authentication failed, redirect back to login form with error message
-            header("Location: login_form.php?error=1");
+            header("Location: ../views/login_form.php?error=1");
             exit;
         }
     }
@@ -33,10 +33,10 @@ class LoginController {
         if ($user) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
-            header("Location: dashboard.php");
+            header("Location: ../views/dashboard.php");
             exit;
         } else {
-            header("Location: login_form.php?error=1");
+            header("Location: ../views/login_form.php?error=1");
             exit;
         }
     }
