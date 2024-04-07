@@ -9,22 +9,50 @@ class DatabaseController {
 
     public function connect() {
         $this->conn = null;
-
+    
         try {
             $this->conn = new PDO('mysql:host=' . $this->host, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+    
             $query = "CREATE DATABASE IF NOT EXISTS $this->dbname";
             $this->conn->exec($query);
-
+    
             $this->conn->exec("USE $this->dbname");
+    
+            // Check if the users table exists, and create it if it doesn't
+            $stmt = $this->conn->query("SHOW TABLES LIKE 'users'");
+            if ($stmt->rowCount() == 0) {
+                $this->createUsersTable(); // You should define a method to create the users table
+            }
         } catch(PDOException $e) {
             echo 'Connection Error: ' . $e->getMessage();
         }
-
+    
         return $this->conn;
-    }
+    }    
 
+    public function createUsersTable() {
+        try {
+            // Define the SQL query to create the users table
+            $query = "CREATE TABLE users (
+                id INT(11) AUTO_INCREMENT PRIMARY KEY,
+                email VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                firstName VARCHAR(255) NOT NULL,
+                lastName VARCHAR(255) NOT NULL,
+                phoneNumber VARCHAR(20) NOT NULL,
+                role VARCHAR(50) NOT NULL
+            )";
+    
+            // Execute the SQL query
+            $this->conn->exec($query);
+    
+            echo "Users table created successfully!";
+        } catch(PDOException $e) {
+            echo "Error creating users table: " . $e->getMessage();
+        }
+    }
+    
     public function createAppointmentsTable() {
         try {
             $this->conn->exec("CREATE TABLE IF NOT EXISTS appointments (
