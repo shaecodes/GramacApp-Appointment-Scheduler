@@ -103,12 +103,12 @@ class DatabaseController {
         return $service;
     }
 
-    public function saveUser($email, $password, $firstName, $lastName, $phoneNumber, $role) {
+    public function saveUser($email, $password, $first_name, $last_name, $phone_number, $role) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $query = "INSERT INTO users (email, password, firstName, lastName, phoneNumber, role) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO users (email, password, first_name, last_name, phone_number, role) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([$email, $hashedPassword, $firstName, $lastName, $phoneNumber, $role]);
-    }
+        $stmt->execute([$email, $hashedPassword, $first_name, $last_name, $phone_number, $role]);
+    }    
 
     public function authenticateUser($email, $password) {
         $query = "SELECT * FROM users WHERE email = ?";
