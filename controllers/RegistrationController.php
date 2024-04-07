@@ -9,18 +9,15 @@ class RegistrationController {
         $this->db->connect();
     }
 
-    public function showRegistrationForm() {
-        include '../views/registration_form.php';
-    }
-
     public function registerUser($first_name, $last_name, $phone_number, $email, $password) {
         try {
-            if (!$this->isValidPassword($password)) {
-                throw new Exception("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            if (empty($first_name) || empty($last_name) || empty($phone_number) || empty($email) || empty($password)) {
+                throw new Exception("All fields are required.");
             }
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+            // Saves user data to the database
             $stmt = $this->db->conn->prepare("INSERT INTO users (first_name, last_name, phone_number, email, password) 
                                         VALUES (:first_name, :last_name, :phone_number, :email, :password)");
             $stmt->execute([
@@ -30,30 +27,21 @@ class RegistrationController {
                 ':email' => $email,
                 ':password' => $hashedPassword
             ]);
-            // Output success message
-            echo "Registration successful. Redirecting to login form...";
+
+            // Redirects to login form after successful registration
+            header("Location: ../views/login_form.php");
+            exit;
         } catch(PDOException $e) {
-            // Logs the error
             echo "An error occurred while processing your request. Please try again later.";
-            // Output more details about the error for debugging
             echo "Error: " . $e->getMessage();
         } catch(Exception $e) {
-            // Password validation error
             echo $e->getMessage();
         }
-    }    
-
-    private function isValidPassword($password) {
-        // Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character
-        $isValid = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password);
-        if (!$isValid) {
-            throw new Exception("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
-        }
-        return $isValid;
-    }
-
-    public function handleFormSubmission($email, $password, $firstName, $lastName, $phoneNumber, $role) {
-        $this->db->saveUser($email, $password, $firstName, $lastName, $phoneNumber, $role);
     }
 }
 
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $registrationController = new RegistrationController();
+    $registrationController->registerUser($_POST["first_name"], $_POST["last_name"], $_POST["phone_number"], $_POST["email"], $_POST["password"]);
+}

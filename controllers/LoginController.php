@@ -6,38 +6,40 @@ class LoginController {
 
     public function __construct() {
         $this->db = new DatabaseController();
-    }
-
-    public function authenticateUser($email, $password) {
-        // Check user credentials
         $this->db->connect();
-        $user = $this->db->authenticateUser($email, $password);
-
-        if ($user) {
-            // Authentication successful, set session variables or perform any other action
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            // Redirect to dashboard or other page
-            header("Location: ../views/appointment_form.php");
-            exit;
-        } else {
-            // Authentication failed, redirect back to login form with error message
-            header("Location: ../views/login_form.php?error=1");
-            exit;
-        }
     }
 
-    public function handleFormSubmission($email, $password) {
-        $user = $this->db->authenticateUser($email, $password);
+    public function loginUser($email, $password) {
+        try {
+            if (empty($email) || empty($password)) {
+                throw new Exception("Email and password are required.");
+            }
 
-        if ($user) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            header("Location: ../views/dashboard.php");
-            exit;
-        } else {
-            header("Location: ../views/login_form.php?error=1");
-            exit;
+            // Retrieves user data from the database based on the provided email
+            $stmt = $this->db->conn->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->execute([':email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && password_verify($password, $user['password'])) {
+                session_start();
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_email'] = $user['email'];
+                // Redirects to dashboard or profile page after successful login
+                header("Location: ../views/dashboard.php");
+                exit;
+            } else {
+                throw new Exception("Invalid email or password.");
+            }
+        } catch(PDOException $e) {
+            echo "An error occurred while processing your request. Please try again later.";
+            echo "Error: " . $e->getMessage();
+        } catch(Exception $e) {
+            echo $e->getMessage();
         }
     }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $loginController = new LoginController();
+    $loginController->loginUser($_POST["email"], $_POST["password"]);
 }
