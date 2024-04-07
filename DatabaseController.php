@@ -29,18 +29,17 @@ class DatabaseController {
         }
     
         return $this->conn;
-    }    
+    } 
 
     public function createUsersTable() {
         try {
-            // Define the SQL query to create the users table
-            $query = "CREATE TABLE users (
+            $query = "CREATE TABLE IF NOT EXISTS users (
                 id INT(11) AUTO_INCREMENT PRIMARY KEY,
                 email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
-                firstName VARCHAR(255) NOT NULL,
-                lastName VARCHAR(255) NOT NULL,
-                phoneNumber VARCHAR(20) NOT NULL,
+                first_name VARCHAR(255) NOT NULL,
+                last_name VARCHAR(255) NOT NULL, 
+                phone_number VARCHAR(20) NOT NULL,
                 role VARCHAR(50) NOT NULL
             )";
     
@@ -51,7 +50,7 @@ class DatabaseController {
         } catch(PDOException $e) {
             echo "Error creating users table: " . $e->getMessage();
         }
-    }
+    }    
     
     public function createAppointmentsTable() {
         try {
