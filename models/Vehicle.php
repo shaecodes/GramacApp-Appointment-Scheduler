@@ -1,6 +1,6 @@
 <?php
 
-require_once 'DatabaseController.php';
+require_once 'controllers/DatabaseController.php';
 
 class Vehicle{
     private $db;

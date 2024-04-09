@@ -1,5 +1,5 @@
 <?php
-require_once('../DatabaseController.php');
+require_once('DatabaseController.php');
 
 class LoginController {
     private $db;
