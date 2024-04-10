@@ -16,15 +16,17 @@ class RegistrationController {
             }
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $role = "customer";
 
-            $stmt = $this->db->conn->prepare("INSERT INTO users (first_name, last_name, phone_number, email, password) 
-                                        VALUES (:first_name, :last_name, :phone_number, :email, :password)");
+            $stmt = $this->db->conn->prepare("INSERT INTO users (first_name, last_name, phone_number, email, password, role) 
+                                        VALUES (:first_name, :last_name, :phone_number, :email, :password, :role)");
             $stmt->execute([
                 ':first_name' => $first_name,
                 ':last_name' => $last_name,
                 ':phone_number' => $phone_number,
                 ':email' => $email,
-                ':password' => $hashedPassword
+                ':password' => $hashedPassword,
+                ':role' => $role
             ]);
 
             header("Location: ../views/login_form.php");
