@@ -2,10 +2,13 @@
 <html>
 <head>
     <title>Appointment Form</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <h2>Appointment Form</h2>
     <form id="loginForm" method="post" action="../controllers/AppointmentController.php">
+        <label>First Name: </label><input type="text" name="firstname" required><br>
+        <label>Last Name: </label><input type="text" name="lastname" required><br>
         <label>Date:</label><input type="date" name="date" required><br>
         <label>Time:</label><input type="time" name="time" required><br>
         <label>Make:</label><input type="text" name="make" required><br>

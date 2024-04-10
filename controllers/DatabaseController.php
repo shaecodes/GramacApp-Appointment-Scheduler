@@ -50,19 +50,22 @@ class DatabaseController {
                 first_name VARCHAR(255) NOT NULL,
                 last_name VARCHAR(255) NOT NULL, 
                 phone_number VARCHAR(20) NOT NULL,
-                role VARCHAR(50) NOT NULL
+                role VARCHAR(50) NOT NULL DEFAULT 'customer' 
             )";
     
             $this->conn->exec($query);
         } catch(PDOException $e) {
             echo "Error creating users table: " . $e->getMessage();
         }
-    }    
+    }
+       
     
     public function createAppointmentsTable() {
         try {
             $this->conn->exec("CREATE TABLE IF NOT EXISTS appointments (
                 id INT(11) AUTO_INCREMENT PRIMARY KEY,
+                firstname VARCHAR(255) NOT NULL,
+                lastname VARCHAR(255) NOT NULL,
                 date DATE,
                 time TIME,
                 make VARCHAR(255),
@@ -80,6 +83,8 @@ class DatabaseController {
         try {
             $this->conn->exec("CREATE TABLE IF NOT EXISTS vehicles (
                 id INT(11) AUTO_INCREMENT PRIMARY KEY,
+                firstname VARCHAR(255) NOT NULL,
+                lastname VARCHAR(255) NOT NULL,
                 make VARCHAR(255),
                 model VARCHAR(255),
                 year INT(4),
@@ -96,9 +101,11 @@ class DatabaseController {
         $service = $this->formatService($service);
 
         try {
-            $stmt = $this->conn->prepare("INSERT INTO appointments (date, time, make, model, year, additional_details, service) 
-                                    VALUES (:date, :time, :make, :model, :year, :additional_details, :service)");
+            $stmt = $this->conn->prepare("INSERT INTO appointments (firstname, lastname, date, time, make, model, year, additional_details, service) 
+                                    VALUES (:firstname, :lastname, :date, :time, :make, :model, :year, :additional_details, :service)");
             $stmt->execute([
+                ':firstname' => $data['firstname'],
+                ':lastname' => $data['lastname'],
                 ':date' => $data['date'],
                 ':time' => $data['time'],
                 ':make' => $data['make'],
@@ -115,10 +122,12 @@ class DatabaseController {
     public function saveVehicle($data) {
         $this->createVehiclesTable();
         try {
-            $stmt = $this -> conn ->prepare("INSERT INTO vehicles (make, model, year, additional_details) 
-                                    VALUES (:make, :model, :year, :additional_details)");
+            $stmt = $this -> conn ->prepare("INSERT INTO vehicles (firstname, lastname, make, model, year, additional_details) 
+                                    VALUES (:firstname, :lastname, :make, :model, :year, :additional_details)");
             
             $stmt->execute([
+                ':firstname' => $data['firstname'],
+                ':lastname' => $data['lastname'],
                 ':make' => $data['make'],
                 ':model' => $data['model'],
                 ':year' => $data['year'],
