@@ -19,11 +19,21 @@ class DatabaseController {
     
             $this->conn->exec("USE $this->dbname");
     
-            // Check if the users table exists, and create it if it doesn't
             $stmt = $this->conn->query("SHOW TABLES LIKE 'users'");
             if ($stmt->rowCount() == 0) {
-                $this->createUsersTable(); // You should define a method to create the users table
+                $this->createUsersTable(); 
             }
+
+            $stmt = $this->conn->query("SHOW TABLES LIKE 'appointments'");
+            if ($stmt->rowCount() == 0) {
+                $this->createAppointmentsTable(); 
+            }
+
+            $stmt = $this->conn->query("SHOW TABLES LIKE 'vehicles'");
+            if ($stmt->rowCount() == 0) {
+                $this->createVehiclesTable(); 
+            }
+
         } catch(PDOException $e) {
             echo 'Connection Error: ' . $e->getMessage();
         }
@@ -43,10 +53,7 @@ class DatabaseController {
                 role VARCHAR(50) NOT NULL
             )";
     
-            // Execute the SQL query
             $this->conn->exec($query);
-    
-            echo "Users table created successfully!";
         } catch(PDOException $e) {
             echo "Error creating users table: " . $e->getMessage();
         }

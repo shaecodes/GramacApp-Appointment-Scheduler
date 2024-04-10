@@ -1,14 +1,14 @@
 <?php
-require_once 'models/Appointment.php';
-require_once 'models/Vehicle.php';
+
+require_once '../models/Appointment.php';
+require_once '../models/Vehicle.php';
+require_once '../controllers/DatabaseController.php';
 
 class AppointmentController {
-    private $appointment;
-    private $vehicle;
+    private $db;
 
-    public function __construct() {
-        $this->appointment = new Appointment();
-        $this->vehicle = new Vehicle();
+    public function __construct(DatabaseController $db) {
+        $this->db = $db;
     }
 
     public function handleRequest() {
@@ -20,31 +20,75 @@ class AppointmentController {
         }
     }
 
-    private function createAppointment() {
-        $service = isset($_POST['service']) ? $_POST['service'] : '';
-    
-        $appointmentData = [
-            'date' => $_POST['date'],
-            'time' => $_POST['time'],
-            'make' => $_POST['make'],
-            'model' => $_POST['model'],
-            'year' => $_POST['year'],
-            'additional_details' => $_POST['additional_details'],
-            'service' => $service 
-        ];
-    
-        $this->appointment->saveAppointment($appointmentData);
+    public function createAppointment() {
+        try {
+            $appointmentData = $this->validateAppointmentData($_POST);
+            $this->db->saveAppointment($appointmentData);
+            $this->displayInvoice($appointmentData);
+        } catch(PDOException $e) {
+            $this->handleError("An error occurred while processing your request. Please try again later. Error: " . $e->getMessage());
+        } catch(Exception $e) {
+            $this->handleError($e->getMessage());
+        }
     }
     
-    private function createVehicle() {
-        $vehicleData = [
-            'make' => $_POST['make'],
-            'model' => $_POST['model'],
-            'year' => $_POST['year'],
-            'additional_details' => $_POST['additional_details'],
+    public function createVehicle() {
+        try {
+            $vehicleData = $this->validateVehicleData($_POST);
+            $this->db->saveVehicle($vehicleData);
+        } catch(PDOException $e) {
+            $this->handleError("An error occurred while processing your request. Please try again later. Error: " . $e->getMessage());
+        } catch(Exception $e) {
+            $this->handleError($e->getMessage());
+        }
+    }
+
+    private function validateAppointmentData($postData) {
+        $requiredFields = ['date', 'time', 'make', 'model', 'year'];
+        foreach ($requiredFields as $field) {
+            if (empty($postData[$field])) {
+                throw new Exception("All fields are required.");
+            }
+        }
+        $service = isset($postData['service']) ? $postData['service'] : [];
+        return [
+            'date' => $postData['date'],
+            'time' => $postData['time'],
+            'make' => $postData['make'],
+            'model' => $postData['model'],
+            'year' => $postData['year'],
+            'additional_details' => $postData['additional_details'],
+            'service' => implode(", ", $service)
         ];
-    
-        $this->vehicle->saveVehicle($vehicleData);
-    }      
+    }
+
+    private function validateVehicleData($postData) {
+        return [
+            'make' => $postData['make'],
+            'model' => $postData['model'],
+            'year' => $postData['year'],
+            'additional_details' => $postData['additional_details'],
+        ];
+    }
+
+    private function displayInvoice($appointmentData) {
+        $invoiceHTML = "<h2>Appointment Invoice</h2>";
+        foreach ($appointmentData as $key => $value) {
+            $invoiceHTML .= "<p><strong>$key:</strong> $value</p>";
+        }
+        echo $invoiceHTML;
+    }
+
+    private function handleError($errorMessage) {
+        echo $errorMessage;
+    }
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $db = new DatabaseController();
+    $db->connect();
+    $appointmentController = new AppointmentController($db);
+    $appointmentController->handleRequest();
+}
+
 ?>

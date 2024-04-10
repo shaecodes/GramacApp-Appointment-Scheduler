@@ -17,7 +17,6 @@ class RegistrationController {
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // Saves user data to the database
             $stmt = $this->db->conn->prepare("INSERT INTO users (first_name, last_name, phone_number, email, password) 
                                         VALUES (:first_name, :last_name, :phone_number, :email, :password)");
             $stmt->execute([
@@ -28,7 +27,6 @@ class RegistrationController {
                 ':password' => $hashedPassword
             ]);
 
-            // Redirects to login form after successful registration
             header("Location: ../views/login_form.php");
             exit;
         } catch(PDOException $e) {

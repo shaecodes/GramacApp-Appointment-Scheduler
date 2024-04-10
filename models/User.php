@@ -1,6 +1,6 @@
 <?php
 
-require_once 'controllers/DatabaseController.php';
+require_once '../controllers/DatabaseController.php';
 
 class User {
     protected $db;
@@ -44,16 +44,6 @@ class Admin extends User {
         parent::__construct($email, $password, $firstName, $lastName, $phoneNumber, $role);
         $this->adminId = $adminId;
     }
-
-    public function createAppointment() {
-        $this->db->connect();
-        $this->db->createAppointment($this->adminId);
-    }
-
-    public function generateReport() {
-        $this->db->connect();
-        $this->db->generateReport($this->adminId);
-    }
 }
 
 class Customer extends User {
@@ -62,11 +52,6 @@ class Customer extends User {
     public function __construct($email, $password, $firstName, $lastName, $phoneNumber, $role, $customerId) {
         parent::__construct($email, $password, $firstName, $lastName, $phoneNumber, $role);
         $this->customerId = $customerId;
-    }
-
-    public function createAppointment() {
-        $this->db->connect();
-        $this->db->createAppointment($this->customerId);
     }
 }
 

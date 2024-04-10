@@ -15,7 +15,6 @@ class LoginController {
                 throw new Exception("Email and password are required.");
             }
 
-            // Retrieves user data from the database based on the provided email
             $stmt = $this->db->conn->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->execute([':email' => $email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,8 +23,7 @@ class LoginController {
                 session_start();
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_email'] = $user['email'];
-                // Redirects to dashboard or profile page after successful login
-                header("Location: ../views/dashboard.php");
+                header("Location: ../views/appointment_form.php");
                 exit;
             } else {
                 throw new Exception("Invalid email or password.");
