@@ -13,6 +13,19 @@
             color: #333;
             text-align: center;
         }
+        nav {
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
         form {
             width: 50%;
             margin: 0 auto;
@@ -57,7 +70,11 @@
     </style>
 </head>
 <body>
-    <h2>Appointment Form</h2>
+    <nav>
+        <a href="appointment_form.php">Make an Appointment</a>
+        <a href="report.php">Generate Report</a>
+    </nav>
+    <h2 id="make-appointment">Appointment Form</h2>
     <form id="loginForm" method="post" action="../controllers/AppointmentController.php">
         <label>First Name: </label><input type="text" name="firstname" required><br>
         <label>Last Name: </label><input type="text" name="lastname" required><br>
@@ -90,5 +107,6 @@
         <br>
         <input type="submit" value="Submit">
     </form>
+    <a href="#top">Back to Top</a>
 </body>
 </html>
