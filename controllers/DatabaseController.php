@@ -166,5 +166,16 @@ class DatabaseController {
         }
     }
 
+    public function getAllTables() {
+        try {
+            $stmt = $this->conn->query("SHOW TABLES");
+            $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            return $tables;
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return array(); // Return an empty array in case of an error
+        }
+    }
+
 }
 
