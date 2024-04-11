@@ -6,13 +6,125 @@ $conn = $dbController->connect();
 
 $tables = $dbController->getAllTables();
 
-echo "<h1>Database Tables</h1>";
-echo "<ul>";
-foreach ($tables as $table) {
-    echo "<li>$table</li>";
-}
-echo "</ul>";
+echo '
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Tables</title>
+    <style>
+        /* Embedded CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        nav a:hover {
+            background-color: #0056b3;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+    </style>
 
-// Optionally, you can close the database connection here if it's no longer needed
-// $conn = null;
+    <script>
+        function deleteRow(table, id) {
+            if (confirm("Are you sure you want to delete this record?")) {
+                // Send an AJAX request to delete the record
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Reload the page after deletion
+                        location.reload();
+                    }
+                };
+                xhttp.open("POST", "delete.php", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("table=" + table + "&id=" + id);
+            }
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="appointment_form.php">Make an Appointment</a>
+        <a href="report.php">Generate Report</a>
+    </nav>
+    <h1>Report</h1>
+    
+';
+
+foreach ($tables as $table) {
+    if ($table === 'users') {
+        continue;
+    }
+    echo "<h2>$table</h2>";
+    echo "<table>";
+
+    $stmt = $conn->query("SELECT * FROM $table");
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo "<tr>";
+    foreach ($rows[0] as $column => $value) {
+        echo "<th>$column</th>";
+    }
+    echo "<th>Action</th>";
+    echo "</tr>";
+
+    foreach ($rows as $row) {
+        echo "<tr>";
+        foreach ($row as $key => $value) {
+            echo "<td>$value</td>";
+        }
+        echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
+}
+
+echo "
+</body>
+</html>";
 ?>
