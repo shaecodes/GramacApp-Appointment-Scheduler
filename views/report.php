@@ -1,9 +1,73 @@
 <?php
 include '../controllers/DatabaseController.php';
 
+function searchByLicensePlate($conn, $tables) {
+    $licensePlate = isset($_GET['license_plate']) ? $_GET['license_plate'] : '';
+
+    foreach ($tables as $table) {
+        if ($table === 'users') {
+            continue;
+        }
+        echo "<h2>$table</h2>";
+        echo "<table>";
+
+        $stmt = $conn->prepare("SELECT * FROM $table WHERE license_plate LIKE ?");
+        $stmt->execute(["%$licensePlate%"]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        echo "<tr>";
+        foreach ($rows[0] as $column => $value) {
+            echo "<th>$column</th>";
+        }
+        echo "<th>Action</th>";
+        echo "</tr>";
+
+        foreach ($rows as $row) {
+            echo "<tr>";
+            foreach ($row as $key => $value) {
+                echo "<td>$value</td>";
+            }
+            echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    }
+}
+
+function showAll($conn, $tables) {
+    foreach ($tables as $table) {
+        if ($table === 'users') {
+            continue;
+        }
+        echo "<h2>$table</h2>";
+        echo "<table>";
+
+        $stmt = $conn->query("SELECT * FROM $table");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        echo "<tr>";
+        foreach ($rows[0] as $column => $value) {
+            echo "<th>$column</th>";
+        }
+        echo "<th>Action</th>";
+        echo "</tr>";
+
+        foreach ($rows as $row) {
+            echo "<tr>";
+            foreach ($row as $key => $value) {
+                echo "<td>$value</td>";
+            }
+            echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    }
+}
+
 $dbController = new DatabaseController();
 $conn = $dbController->connect();
-
 $tables = $dbController->getAllTables();
 
 echo '
@@ -112,36 +176,10 @@ echo '
     </div>
 ';
 
-foreach ($tables as $table) {
-    if ($table === 'users') {
-        continue;
-    }
-    echo "<h2>$table</h2>";
-    echo "<table>";
-
-    $licensePlate = isset($_GET['license_plate']) ? $_GET['license_plate'] : '';
-
-    $stmt = $conn->prepare("SELECT * FROM $table WHERE license_plate LIKE ?");
-    $stmt->execute(["%$licensePlate%"]);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    echo "<tr>";
-    foreach ($rows[0] as $column => $value) {
-        echo "<th>$column</th>";
-    }
-    echo "<th>Action</th>";
-    echo "</tr>";
-
-    foreach ($rows as $row) {
-        echo "<tr>";
-        foreach ($row as $key => $value) {
-            echo "<td>$value</td>";
-        }
-        echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
-        echo "</tr>";
-    }
-
-    echo "</table>";
+if (isset($_GET['license_plate'])) {
+    searchByLicensePlate($conn, $tables);
+} else {
+    showAll($conn, $tables);
 }
 
 echo "

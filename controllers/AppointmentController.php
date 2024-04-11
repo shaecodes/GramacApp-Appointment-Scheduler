@@ -1,5 +1,7 @@
 <?php
 
+//REPORT GENERATION UI
+
 require_once '../models/Appointment.php';
 require_once '../models/Vehicle.php';
 require_once '../controllers/DatabaseController.php';
@@ -78,7 +80,6 @@ class AppointmentController {
     }
 
     private function displayInvoice($appointmentData) {
-        // Build a form with hidden inputs containing the invoice data
         $invoiceHTML = "<form id='invoiceForm' method='post' action='../views/invoice.php'>";
         foreach ($appointmentData as $key => $value) {
             $invoiceHTML .= "<input type='hidden' name='$key' value='$value'>";
@@ -94,7 +95,6 @@ class AppointmentController {
         echo $invoiceHTML;
     }
     
-
     private function handleError($errorMessage) {
         echo $errorMessage;
     }
