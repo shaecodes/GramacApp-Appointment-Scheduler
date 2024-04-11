@@ -3,7 +3,6 @@
 <head>
     <title>User Registration</title>
     <style>
-        /* Embedded CSS styles */
         body {
             font-family: Arial, sans-serif;
         }

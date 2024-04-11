@@ -78,12 +78,22 @@ class AppointmentController {
     }
 
     private function displayInvoice($appointmentData) {
-        $invoiceHTML = "<h2>Appointment Invoice</h2>";
+        // Build a form with hidden inputs containing the invoice data
+        $invoiceHTML = "<form id='invoiceForm' method='post' action='../views/invoice.php'>";
         foreach ($appointmentData as $key => $value) {
-            $invoiceHTML .= "<p><strong>$key:</strong> $value</p>";
+            $invoiceHTML .= "<input type='hidden' name='$key' value='$value'>";
         }
+        $invoiceHTML .= "</form>";
+    
+        
+        $invoiceHTML .= "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                document.getElementById('invoiceForm').submit();
+                            });
+                        </script>";
         echo $invoiceHTML;
     }
+    
 
     private function handleError($errorMessage) {
         echo $errorMessage;
