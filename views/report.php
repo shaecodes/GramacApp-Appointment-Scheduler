@@ -62,9 +62,19 @@ echo '
             border: none;
             border-radius: 3px;
             cursor: pointer;
+            margin-left: 10px;
         }
         button:hover {
             background-color: #c82333;
+        }
+        .search-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-input {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
         }
     </style>
 
@@ -93,6 +103,13 @@ echo '
     </nav>
     <h1>Report</h1>
     
+    <div class="search-form">
+        <form method="GET">
+            <input type="text" name="license_plate" class="search-input" placeholder="Search by License Plate">
+            <button type="submit">Search</button>
+            <a href="report.php" class="show-all-button"><button type="button">Show All</button></a>
+        </form>
+    </div>
 ';
 
 foreach ($tables as $table) {
@@ -102,7 +119,10 @@ foreach ($tables as $table) {
     echo "<h2>$table</h2>";
     echo "<table>";
 
-    $stmt = $conn->query("SELECT * FROM $table");
+    $licensePlate = isset($_GET['license_plate']) ? $_GET['license_plate'] : '';
+
+    $stmt = $conn->prepare("SELECT * FROM $table WHERE license_plate LIKE ?");
+    $stmt->execute(["%$licensePlate%"]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo "<tr>";
