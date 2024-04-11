@@ -44,7 +44,7 @@ class AppointmentController {
     }
 
     private function validateAppointmentData($postData) {
-        $requiredFields = ['firstname', 'lastname', 'date', 'time', 'make', 'model', 'year'];
+        $requiredFields = ['firstname', 'lastname', 'date', 'time', 'license_plate', 'make', 'model', 'year'];
         foreach ($requiredFields as $field) {
             if (empty($postData[$field])) {
                 throw new Exception("All fields are required.");
@@ -56,6 +56,7 @@ class AppointmentController {
             'lastname' => $postData['lastname'],
             'date' => $postData['date'],
             'time' => $postData['time'],
+            'license_plate' => $postData['license_plate'],
             'make' => $postData['make'],
             'model' => $postData['model'],
             'year' => $postData['year'],
@@ -68,6 +69,7 @@ class AppointmentController {
         return [
             'firstname' => $postData['firstname'],
             'lastname' => $postData['lastname'],
+            'license_plate' => $postData['license_plate'],
             'make' => $postData['make'],
             'model' => $postData['model'],
             'year' => $postData['year'],

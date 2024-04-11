@@ -68,6 +68,7 @@ class DatabaseController {
                 lastname VARCHAR(255) NOT NULL,
                 date DATE,
                 time TIME,
+                license_plate VARCHAR(255) NOT NULL,
                 make VARCHAR(255),
                 model VARCHAR(255),
                 year INT(4),
@@ -85,6 +86,7 @@ class DatabaseController {
                 id INT(11) AUTO_INCREMENT PRIMARY KEY,
                 firstname VARCHAR(255) NOT NULL,
                 lastname VARCHAR(255) NOT NULL,
+                license_plate VARCHAR(255) NOT NULL,
                 make VARCHAR(255),
                 model VARCHAR(255),
                 year INT(4),
@@ -101,13 +103,14 @@ class DatabaseController {
         $service = $this->formatService($service);
 
         try {
-            $stmt = $this->conn->prepare("INSERT INTO appointments (firstname, lastname, date, time, make, model, year, additional_details, service) 
-                                    VALUES (:firstname, :lastname, :date, :time, :make, :model, :year, :additional_details, :service)");
+            $stmt = $this->conn->prepare("INSERT INTO appointments (firstname, lastname, date, time, license_plate, make, model, year, additional_details, service) 
+                                    VALUES (:firstname, :lastname, :date, :time, :license_plate, :make, :model, :year, :additional_details, :service)");
             $stmt->execute([
                 ':firstname' => $data['firstname'],
                 ':lastname' => $data['lastname'],
                 ':date' => $data['date'],
                 ':time' => $data['time'],
+                ':license_plate' => $data['license_plate'],
                 ':make' => $data['make'],
                 ':model' => $data['model'],
                 ':year' => $data['year'],
@@ -122,12 +125,13 @@ class DatabaseController {
     public function saveVehicle($data) {
         $this->createVehiclesTable();
         try {
-            $stmt = $this -> conn ->prepare("INSERT INTO vehicles (firstname, lastname, make, model, year, additional_details) 
-                                    VALUES (:firstname, :lastname, :make, :model, :year, :additional_details)");
+            $stmt = $this -> conn ->prepare("INSERT INTO vehicles (firstname, lastname, license_plate, make, model, year, additional_details) 
+                                    VALUES (:firstname, :lastname, :license_plate, :make, :model, :year, :additional_details)");
             
             $stmt->execute([
                 ':firstname' => $data['firstname'],
                 ':lastname' => $data['lastname'],
+                ':license_plate' => $data['license_plate'],
                 ':make' => $data['make'],
                 ':model' => $data['model'],
                 ':year' => $data['year'],
@@ -173,7 +177,7 @@ class DatabaseController {
             return $tables;
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
-            return array(); // Return an empty array in case of an error
+            return array(); 
         }
     }
 

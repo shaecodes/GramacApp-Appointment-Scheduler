@@ -80,6 +80,7 @@
         <label>Last Name: </label><input type="text" name="lastname" required><br>
         <label>Date:</label><input type="date" name="date" required><br>
         <label>Time:</label><input type="time" name="time" required><br>
+        <label>License Plate Number:</label><input type="text" name="license_plate" required><br>
         <label>Make:</label><input type="text" name="make" required><br>
         <label>Model:</label><input type="text" name="model" required><br>
         <label>Year:</label><input type="text" name="year" required><br>
