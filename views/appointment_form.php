@@ -70,10 +70,7 @@
     </style>
 </head>
 <body>
-    <nav>
-        <a href="appointment_form.php">Make an Appointment</a>
-        <a href="report.php">Generate Report</a>
-    </nav>
+    <?php include 'nav.php'; ?>
     <h2 id="make-appointment">Appointment Form</h2>
     <form id="loginForm" method="post" action="../controllers/AppointmentController.php">
         <label>First Name: </label><input type="text" name="firstname" required><br>
