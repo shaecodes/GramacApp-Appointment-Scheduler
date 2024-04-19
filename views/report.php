@@ -89,7 +89,7 @@ echo '
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background: url("red_suv.jpg");
+            background-color: #f2f2f2;
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
@@ -99,7 +99,6 @@ echo '
         h1 {
             text-align: center;
             margin-bottom: 20px;
-            color: white;
         }
         h2 {
             margin-top: 30px;

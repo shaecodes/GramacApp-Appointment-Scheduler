@@ -12,7 +12,8 @@ class LoginController {
     public function loginUser($email, $password) {
         try {
             if (empty($email) || empty($password)) {
-                throw new Exception("Email and password are required.");
+                echo "<script>alert('Email and password are required.');</script>";
+                return;
             }
 
             $stmt = $this->db->conn->prepare("SELECT * FROM users WHERE email = :email");
@@ -27,13 +28,13 @@ class LoginController {
                 header("Location: ../views/appointment_form.php");
                 exit;
             } else {
-                throw new Exception("Invalid email or password.");
+                echo "<script>alert('Invalid email or password.');</script>";
+                echo '<script>window.location.href = "../views/login_form.php";</script>'; // Change "login.php" to your login page
+                exit;
             }
         } catch(PDOException $e) {
-            echo "An error occurred while processing your request. Please try again later.";
+            echo "<script>alert('An error occurred while processing your request. Please try again later.');</script>";
             echo "Error: " . $e->getMessage();
-        } catch(Exception $e) {
-            echo $e->getMessage();
         }
     }
 }
