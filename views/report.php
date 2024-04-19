@@ -15,20 +15,24 @@ function searchByLicensePlate($conn, $tables) {
         $stmt->execute(["%$licensePlate%"]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        echo "<tr>";
-        foreach ($rows[0] as $column => $value) {
-            echo "<th>$column</th>";
-        }
-        echo "<th>Action</th>";
-        echo "</tr>";
-
-        foreach ($rows as $row) {
+        if (count($rows) > 0) {
             echo "<tr>";
-            foreach ($row as $key => $value) {
-                echo "<td>$value</td>";
+            foreach ($rows[0] as $column => $value) {
+                echo "<th>$column</th>";
             }
-            echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
+            echo "<th>Action</th>";
             echo "</tr>";
+
+            foreach ($rows as $row) {
+                echo "<tr>";
+                foreach ($row as $key => $value) {
+                    echo "<td>$value</td>";
+                }
+                echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='100'>No records found</td></tr>";
         }
 
         echo "</table>";
@@ -46,20 +50,24 @@ function showAll($conn, $tables) {
         $stmt = $conn->query("SELECT * FROM $table");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        echo "<tr>";
-        foreach ($rows[0] as $column => $value) {
-            echo "<th>$column</th>";
-        }
-        echo "<th>Action</th>";
-        echo "</tr>";
-
-        foreach ($rows as $row) {
+        if (count($rows) > 0) {
             echo "<tr>";
-            foreach ($row as $key => $value) {
-                echo "<td>$value</td>";
+            foreach ($rows[0] as $column => $value) {
+                echo "<th>$column</th>";
             }
-            echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
+            echo "<th>Action</th>";
             echo "</tr>";
+
+            foreach ($rows as $row) {
+                echo "<tr>";
+                foreach ($row as $key => $value) {
+                    echo "<td>$value</td>";
+                }
+                echo "<td><button onclick=\"deleteRow('$table', {$row['id']})\">Delete</button></td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='100'>No records found</td></tr>";
         }
 
         echo "</table>";
@@ -81,10 +89,17 @@ echo '
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
+            background: url("red_suv.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            -webkit-backdrop-filter: blur(3px); 
+            backdrop-filter: blur(3px); 
         }
         h1 {
             text-align: center;
             margin-bottom: 20px;
+            color: white;
         }
         h2 {
             margin-top: 30px;
@@ -94,6 +109,7 @@ echo '
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 30px;
+            background-color: #fff;
         }
         th, td {
             padding: 10px;
@@ -101,7 +117,7 @@ echo '
             text-align: left;
         }
         th {
-            background-color: #007bff;
+            background-color: #70120c;
             color: #fff;
         }
         nav {
@@ -111,13 +127,14 @@ echo '
         nav a {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #b9222b;
             color: #fff;
             text-decoration: none;
             margin-right: 10px;
+            border-radius: 5px;
         }
         nav a:hover {
-            background-color: #0056b3;
+            background-color: #70120c;
         }
         button {
             padding: 5px 10px;
@@ -136,9 +153,24 @@ echo '
             text-align: center;
         }
         .search-input {
-            padding: 5px 10px;
+            padding: 8px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .search-button {
+            padding: 8px 20px;
+            background-color: #b9222b;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #70120c;
+        }
+        .show-all-button {
+            text-decoration: none;
         }
     </style>
 
@@ -170,7 +202,7 @@ echo '
     <div class="search-form">
         <form method="GET">
             <input type="text" name="license_plate" class="search-input" placeholder="Search by License Plate">
-            <button type="submit">Search</button>
+            <button type="submit" class="search-button">Search</button>
             <a href="report.php" class="show-all-button"><button type="button">Show All</button></a>
         </form>
     </div>
