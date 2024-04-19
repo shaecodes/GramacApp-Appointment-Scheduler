@@ -82,7 +82,7 @@ echo '
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Database Tables</title>
+    <title>Gramac Auto Report</title>
     <style>
         /* Embedded CSS styles */
         body {
