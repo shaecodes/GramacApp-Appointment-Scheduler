@@ -67,6 +67,16 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+
+        select{
+            width: calc(100% - 10px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
     </style>
 </head>
 <body>
@@ -76,7 +86,18 @@
         <label>First Name: </label><input type="text" name="firstname" required><br>
         <label>Last Name: </label><input type="text" name="lastname" required><br>
         <label>Date:</label><input type="date" name="date" required><br>
-        <label>Time:</label><input type="time" name="time" required><br>
+        <label>Time:</label>
+        <select name="time" required>
+            <option value="09:00">09:00 AM</option>
+            <option value="10:00">10:00 AM</option>
+            <option value="11:00">11:00 AM</option>
+            <option value="12:00">12:00 PM</option>
+            <option value="13:00">01:00 PM</option>
+            <option value="14:00">02:00 PM</option>
+            <option value="15:00">03:00 PM</option>
+            <option value="16:00">04:00 PM</option>
+            <option value="17:00">05:00 PM</option>
+        </select><br>
         <label>License Plate Number:</label><input type="text" name="license_plate" required><br>
         <label>Make:</label><input type="text" name="make" required><br>
         <label>Model:</label><input type="text" name="model" required><br>

@@ -1,11 +1,18 @@
 <?php
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 class DatabaseController {
     private $host = 'localhost';
     private $username = 'root';
     private $password = '';
     private $dbname = 'gramacdb'; 
     public $conn;
+
+    private $appointmentDate;
+    private $appointmentTime;
 
     public function connect() {
         $this->conn = null;
@@ -97,50 +104,92 @@ class DatabaseController {
         }
     }
 
+
+    public function isAppointmentTimeReserved($date, $time) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM appointments WHERE date = :date AND time = :time");
+        $stmt->execute([
+            ':date' => $date,
+            ':time' => $time
+        ]);
+        $count = $stmt->fetchColumn();
+    
+        return $count > 0;
+    }
+
     public function saveAppointment($data) {
         $this->createAppointmentsTable();
+        $this->appointmentDate = $data['date'];
+        $this->appointmentTime = $data['time'];
+        
         $service = isset($_POST['service']) ? $_POST['service'] : '';
         $service = $this->formatService($service);
 
-        try {
-            $stmt = $this->conn->prepare("INSERT INTO appointments (firstname, lastname, date, time, license_plate, make, model, year, additional_details, service) 
-                                    VALUES (:firstname, :lastname, :date, :time, :license_plate, :make, :model, :year, :additional_details, :service)");
-            $stmt->execute([
-                ':firstname' => $data['firstname'],
-                ':lastname' => $data['lastname'],
-                ':date' => $data['date'],
-                ':time' => $data['time'],
-                ':license_plate' => $data['license_plate'],
-                ':make' => $data['make'],
-                ':model' => $data['model'],
-                ':year' => $data['year'],
-                ':additional_details' => $data['additional_details'],
-                ':service' => $service
-            ]);
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
+        $appointmentDate = $data['date'];
+        $appointmentTime = $data['time'];
+        if ($this->isAppointmentTimeReserved($appointmentDate, $appointmentTime)) {
+            echo "<script>alert('The selected appointment time is already reserved. Vehicle information cannot be saved.')</script>";
+            echo "<script>window.location.href = '../views/appointment_form.php';</script>";
+            exit;
+        }
+        else{
+
+            try {
+                $stmt = $this->conn->prepare("INSERT INTO appointments (firstname, lastname, date, time, license_plate, make, model, year, additional_details, service) 
+                                        VALUES (:firstname, :lastname, :date, :time, :license_plate, :make, :model, :year, :additional_details, :service)");
+                $stmt->execute([
+                    ':firstname' => $data['firstname'],
+                    ':lastname' => $data['lastname'],
+                    ':date' => $data['date'],
+                    ':time' => $data['time'],
+                    ':license_plate' => $data['license_plate'],
+                    ':make' => $data['make'],
+                    ':model' => $data['model'],
+                    ':year' => $data['year'],
+                    ':additional_details' => $data['additional_details'],
+                    ':service' => $service
+                ]);
+            } catch(PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
         }
     }
 
     public function saveVehicle($data) {
         $this->createVehiclesTable();
-        try {
-            $stmt = $this -> conn ->prepare("INSERT INTO vehicles (firstname, lastname, license_plate, make, model, year, additional_details) 
-                                    VALUES (:firstname, :lastname, :license_plate, :make, :model, :year, :additional_details)");
-            
-            $stmt->execute([
-                ':firstname' => $data['firstname'],
-                ':lastname' => $data['lastname'],
-                ':license_plate' => $data['license_plate'],
-                ':make' => $data['make'],
-                ':model' => $data['model'],
-                ':year' => $data['year'],
-                ':additional_details' => $data['additional_details']
-            ]);
-            
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
+
+        $appointmentDate = $_SESSION['appointment_date'] ?? null;
+        $appointmentTime = $_SESSION['appointment_time'] ?? null;
+
+        if ($this->isAppointmentTimeReserved($appointmentDate, $appointmentTime)) {
+            echo "<script>alert('The selected appointment time is already reserved. Vehicle information cannot be saved.')</script>";
+            echo "<script>window.location.href = '../views/appointment_form.php';</script>";
+            exit;
+        } 
+        
+        else{
+
+            try {
+                $stmt = $this -> conn ->prepare("INSERT INTO vehicles (firstname, lastname, license_plate, make, model, year, additional_details) 
+                                        VALUES (:firstname, :lastname, :license_plate, :make, :model, :year, :additional_details)");
+                
+                $stmt->execute([
+                    ':firstname' => $data['firstname'],
+                    ':lastname' => $data['lastname'],
+                    ':license_plate' => $data['license_plate'],
+                    ':make' => $data['make'],
+                    ':model' => $data['model'],
+                    ':year' => $data['year'],
+                    ':additional_details' => $data['additional_details']
+                ]);
+    
+                
+            } catch(PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
         }
+        
+        unset($_SESSION['appointment_date']);
+        unset($_SESSION['appointment_time']);
     }
 
     private function formatService($service) {

@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
-                padding: 20px;
+                padding: 70px;
             }
             h2 {
                 text-align: center;
@@ -32,42 +32,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 text-align: center;
                 margin-bottom: 20px;
             }
-            nav a {
-                display: inline-block;
+            nav button {
                 padding: 10px 20px;
                 background-color: #007bff;
-                color: #fff;
-                text-decoration: none;
-                margin-right: 10px;
-            }
-            nav a:hover {
-                background-color: #0056b3;
-            }
-            button {
-                padding: 5px 10px;
-                background-color: #dc3545;
                 color: #fff;
                 border: none;
                 border-radius: 3px;
                 cursor: pointer;
-                margin-left: 10px;
+                margin-right: 10px;
+                text-decoration: none;
             }
-            button:hover {
-                background-color: #c82333;
+            nav button:hover {
+                background-color: #0056b3;
             }
         </style>
     </head>
     <body>
-        <nav>
-            <a href="appointment_form.php">Make an Appointment</a>
-            <a href="report.php">Generate Report</a>
-        </nav>
         <h2>Invoice Details</h2>
+        <br><br><br>
         <ul>';
     foreach ($invoiceData as $key => $value) {
         echo "<li><strong>$key:</strong> $value</li>";
     }
     echo '
+    <br><br><br>
+        <nav>
+            <form action="appointment_form.php">
+                <button type="submit">Make another Appointment</button>
+            </form>
+            <br>
+            <button onclick="window.print()">Print Invoice</button>
+        </nav>
         </ul>
     </body>
     </html>';
@@ -77,3 +72,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit; // Ensure that no further code is executed after the redirection
 }
 ?>
+
