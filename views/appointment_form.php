@@ -5,16 +5,22 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
             margin: 0;
             padding: 0;
+            background: url("red_suv.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            -webkit-backdrop-filter: blur(3px); 
+            backdrop-filter: blur(3px); 
         }
+
         h2 {
-            color: #333;
+            color: white;
             text-align: center;
         }
         nav {
-            background-color: #007bff;
+            background-color: #b9222b;
             padding: 10px 0;
             text-align: center;
         }

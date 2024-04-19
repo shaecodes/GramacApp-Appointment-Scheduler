@@ -6,10 +6,17 @@
         /* Embedded CSS styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
             margin: 0;
+            height: 100vh;
             padding: 0;
+            background: url("red_suv.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            -webkit-backdrop-filter: blur(3px); 
+            backdrop-filter: blur(3px); 
         }
+
         h2 {
             color: #333;
             text-align: center;
