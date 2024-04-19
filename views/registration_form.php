@@ -5,21 +5,41 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            padding: 50px;
+            background: url("red_suv.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            -webkit-backdrop-filter: blur(3px); 
+            backdrop-filter: blur(3px); 
         }
+
         h2 {
             color: #333;
+            text-align: center;
+        }
+        form {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px 50px 50px 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         label {
-            display: inline-block;
-            width: 120px;
+            display: block;
+            margin-bottom: 10px;
             font-weight: bold;
         }
         input[type="text"],
         input[type="email"],
         input[type="password"] {
-            width: 200px;
-            padding: 5px;
+            width: calc(100% - 10px);
+            padding: 8px;
             margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
         input[type="submit"] {
             padding: 10px 20px;
@@ -27,6 +47,7 @@
             color: #fff;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
         }
         input[type="submit"]:hover {
             background-color: #0056b3;

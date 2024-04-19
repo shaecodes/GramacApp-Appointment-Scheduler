@@ -8,7 +8,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             height: 100vh;
-            padding: 0;
+            padding: 50px;
             background: url("red_suv.jpg");
             background-size: cover;
             background-repeat: no-repeat;
@@ -25,7 +25,7 @@
             width: 50%;
             margin: 0 auto;
             background-color: #fff;
-            padding: 20px;
+            padding: 20px 50px 50px 50px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -57,8 +57,9 @@
     </style>
 </head>
 <body>
-    <h2>Login</h2>
+    
     <form id="loginForm" method="post" action="../controllers/LoginController.php">
+        <h2>Login</h2>
         <label>Email:</label><input type="email" name="email" required><br><br>
         <label>Password:</label><input type="password" name="password" required><br><br>
         <input type="submit" value="Login">
