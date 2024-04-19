@@ -24,6 +24,7 @@ class LoginController {
                 session_start();
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_email'] = $user['email'];
+                $_SESSION['role'] = $user['role'];
                 header("Location: ../views/appointment_form.php");
                 exit;
             } else {
